@@ -49,7 +49,7 @@ echo $apple->size; // 0,75
 ================================
 
 
-УСТАНОВКА И ЗАПУСК ПРИДЛОЖЕНИЯ
+УСТАНОВКА И ЗАПУСК (ПРИЛОЖЕНИЕ)
 
 1. git clone https://github.com/IlhomjonKurbanov/test-siktivkar-apples-live.git
 2. composer install
