@@ -7,6 +7,8 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
 
+use backend\models\Apple;
+
 /**
  * Site controller
  */
@@ -26,7 +28,7 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'get-apples', 'generate-apples'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -63,6 +65,51 @@ class SiteController extends Controller
         return $this->render('index');
     }
 
+
+    public function actionGetApples()
+    {
+        
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        if ( Yii::$app->request->isAjax ) {
+
+            return Apple::getApplesList();
+
+        }
+
+    }
+
+    public function actionGenerateApples()
+    {
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        if ( Yii::$app->request->isAjax ) {
+            
+            Apple::updateAll( ['deleted_at' => time()], ['IS', 'deleted_at', NULL] );
+
+            // 12 apples genereted by default
+            for ( $i = 0; $i < 12; $i++ ) {
+
+                $apple = new Apple;
+                $apple->created_by = Yii::$app->user->id;
+                $apple->color = $apple->colors[array_rand($apple->colors)];
+                //$apple->size // по умолчанию 100% будет
+                //$apple->state //  висит на дереве
+                $beginDateTime = time();
+                $endDateTime = $beginDateTime + 432000; // 5 дней по умолчанию
+                $createdAt = mt_rand($beginDateTime, $endDateTime);
+                $apple->created_at = $createdAt;
+                $apple->save();
+
+            }
+
+            return Apple::getApplesList();
+
+        }
+
+    }
+
     /**
      * Login action.
      *
@@ -97,4 +144,5 @@ class SiteController extends Controller
 
         return $this->goHome();
     }
+    
 }
