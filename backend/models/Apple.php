@@ -25,6 +25,18 @@ class Apple extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+
+
+    //apple states
+    const ON_TREE = 1;
+    const FELL_TO_THE_GROUND = 2;
+    const EATEN = 3;
+    const ROTTEN = 4;
+
+    //apple colors
+    public $colors = array('green', 'yellow', 'red', 'grey');
+
+
     public static function tableName()
     {
         return 'apple';
@@ -36,8 +48,10 @@ class Apple extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['created_by', 'color', 'size', 'state', 'created_at', 'fall_at'], 'required'],
+            [['created_by', 'color', 'created_at'], 'required'],
             [['created_by', 'size', 'state', 'created_at', 'fall_at', 'deleted_at'], 'integer'],
+            ['size', 'default', 'value' => 100],
+            ['state', 'default', 'value' => 1],
             [['color'], 'string', 'max' => 10],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
         ];
@@ -69,4 +83,19 @@ class Apple extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'created_by']);
     }
+
+
+    public static function getApplesList()
+    {
+        $activeApples = self::find()
+            ->select('id, color, size, state, FROM_UNIXTIME(created_at) as created_at, FROM_UNIXTIME(fall_at) as fall_at')
+            ->where(['deleted_at' => NULL])
+            ->asArray()
+            ->all();
+        
+        return $activeApples;
+    }
+
+
+
 }
