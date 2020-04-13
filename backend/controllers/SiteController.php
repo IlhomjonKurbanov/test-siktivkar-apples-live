@@ -66,6 +66,11 @@ class SiteController extends Controller
     }
 
 
+    /**
+     * GetApples action.
+     *
+     * @return Json
+     */
     public function actionGetApples()
     {
         
@@ -79,6 +84,11 @@ class SiteController extends Controller
 
     }
 
+    /**
+     * GenerateApples action.
+     *
+     * @return Json
+     */
     public function actionGenerateApples()
     {
 
@@ -100,6 +110,8 @@ class SiteController extends Controller
                 $endDateTime = $beginDateTime + 432000; // 5 дней по умолчанию
                 $createdAt = mt_rand($beginDateTime, $endDateTime);
                 $apple->created_at = $createdAt;
+                // $apple->fall_at // NULL
+                // $apple->deleted_at // NULL
                 $apple->save();
 
             }
@@ -109,6 +121,9 @@ class SiteController extends Controller
         }
 
     }
+
+
+
 
     /**
      * Login action.
