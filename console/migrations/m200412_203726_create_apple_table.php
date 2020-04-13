@@ -8,7 +8,7 @@ use yii\db\Migration;
  *
  * - `{{%user}}`
  */
-class m200412_202712_create_apple_table extends Migration
+class m200412_203726_create_apple_table extends Migration
 {
     /**
      * {@inheritdoc}
@@ -22,7 +22,7 @@ class m200412_202712_create_apple_table extends Migration
             'size' => $this->integer(3)->unsigned()->defaultValue(100),
             'state' => $this->integer(1)->unsigned()->defaultValue(1),
             'created_at' => $this->integer()->unsigned()->notNull(),
-            'fall_at' => $this->integer()->unsigned()->notNull(),
+            'fall_at' => $this->integer()->unsigned(),
             'deleted_at' => $this->integer()->unsigned(),
         ]);
 

@@ -16,76 +16,7 @@ $this->title = 'My Yii Application';
 
     <div class="body-content">
 
-        <div class="row">
-
-            <div class="col-xs-12" id="test">
-
-
-            </div>
-
-
-            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 card">
-
-                <div class="apple-card">
-
-                    <div class="apple"></div>
-                    <h3>Apple #1</h3>
-                
-                </div>
-
-            </div>
-
-
-            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 card">
-
-                <div class="apple-card">
-
-                    <div class="apple"></div>
-                    <h3>Apple #2</h3>
-                
-                </div>
-
-            </div>
-
-
-            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 card">
-
-                <div class="apple-card">
-
-                    <div class="apple"></div>
-                    <h3>Apple #3</h3>
-                
-                </div>
-
-            </div>
-
-
-            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 card">
-
-                <div class="apple-card">
-
-                    <div class="apple"></div>
-                    <h3>Apple #4</h3>
-                
-                </div>
-
-            </div>
-
-    
-
-            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 card">
-
-                <div class="apple-card">
-
-                    <div class="apple"></div>
-                    <h3>Apple #5</h3>
-                
-                </div>
-
-            </div>
-
-
-                       
+        <div class="row" id="test">
 
         </div>
 
@@ -108,19 +39,58 @@ $this->registerJs(
             },
             cache: false,
             success: function (responsData) {
-                var testApples = JSON.stringify(responsData);
-                $("#test").html(testApples);
+
+                $("#test").html("");
+                responsData.forEach(obj => {
+                    Object.entries(obj).forEach(([key, value]) => {
+                        // console.log(`${key} ${value}`);
+                        if ( key == "id") {
+                            $("#test").append(\'<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 card"><div class="apple-card"><div class="apple"></div><h3>Apple \'+`${value}`+\'</h3</div></div>\');
+                        }
+                        
+                    });
+                });
+
             },
 
         });
-
-        alert("ok");
 
     }
     
     ',
 
     yii\web\View::POS_HEAD
+);
+
+
+$this->registerJs(
+    '
+
+        $.ajax({
+            url: "site/get-apples",
+            type: "post",
+            data: {
+                _csrf: yii.getCsrfToken(),
+            },
+            cache: false,
+            success: function (responsData) {
+
+                responsData.forEach(obj => {
+                    Object.entries(obj).forEach(([key, value]) => {
+                        if ( key == "id") {
+                            $("#test").append(\'<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 card"><div class="apple-card"><div class="apple"></div><h3>Apple \'+`${value}`+\'</h3</div></div>\');
+                        }
+                        
+                    });
+                });
+
+            },
+
+        });
+
+    ',
+
+    yii\web\View::POS_READY
 );
 
 ?>
