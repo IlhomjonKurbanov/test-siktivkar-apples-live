@@ -34,7 +34,7 @@ class Apple extends \yii\db\ActiveRecord
     const ROTTEN = 4;
 
     //apple colors
-    public $colors = array('green', 'yellow', 'red', 'grey');
+    public $colors = array('green', 'lime', 'red', 'grey');
 
 
     public static function tableName()

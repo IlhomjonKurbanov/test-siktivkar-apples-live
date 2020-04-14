@@ -144,7 +144,7 @@ a.desc:after {
 
 .apple {
     background: green;
-    background: linear-gradient(#5bc236, #308014, #006400);
+    /* background: linear-gradient(#5bc236, #308014, #006400); */
     width: 208px;
     height: 198px;
     position: absolute;
@@ -163,7 +163,7 @@ a.desc:after {
 }
 
 .apple:after {
-    background: #F5FFFA;
+    /* background: #F5FFFA; */
     content: "";
     width: 90px;
     height: 90px;

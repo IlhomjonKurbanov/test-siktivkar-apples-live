@@ -103,7 +103,7 @@ class SiteController extends Controller
 
                 $apple = new Apple;
                 $apple->created_by = Yii::$app->user->id;
-                $apple->color = $apple->colors[array_rand($apple->colors)];
+                $apple->color = $apple->colors[array_rand(array('green', 'lime', 'red'))];
                 //$apple->size // по умолчанию 100% будет
                 //$apple->state //  висит на дереве
                 $beginDateTime = time();
