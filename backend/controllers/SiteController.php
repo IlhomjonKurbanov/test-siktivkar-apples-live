@@ -28,7 +28,7 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index', 'get-apples', 'generate-apples'],
+                        'actions' => ['logout', 'index', 'get-apples', 'generate-apples', 'fallen-apple', 'eaten-apple'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -123,6 +123,118 @@ class SiteController extends Controller
     }
 
 
+
+    /**
+     * GenerateApples action.
+     *
+     * @return Json
+     */
+    public function actionFallenApple()
+    {
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        if ( Yii::$app->request->isAjax ) {
+
+            $data = Yii::$app->request->post();
+            $id = json_decode( '[' . $data['id'] . ']', true );
+            $id = $id[0];
+
+            $currentApple = Apple::findOne($id);
+
+            switch ( $currentApple->state ) {
+                case 1: 
+                    $currentApple->state = Apple::FELL_TO_THE_GROUND;
+                    $apple->fall_at = time();
+                    $currentApple->save(false);
+                    $appleStatus = "Яблоко упало";
+                    break;
+                case 2: 
+                    $appleStatus = "Яблоко уже лежит на земле";
+                    break;
+                case 3: 
+                    $appleStatus = "Гнилое яблоко";
+                    break;
+                default:
+                    $appleStatus = "";
+
+            }
+
+            $respons = [ 'stateText' => $appleStatus,  'currentApple' => $currentApple ];
+
+            return $respons;
+
+        }
+
+    }
+
+
+
+    /**
+     * GenerateApples action.
+     *
+     * @return Json
+     */
+    public function actionEatenApple()
+    {
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        if ( Yii::$app->request->isAjax ) {
+
+            $data = Yii::$app->request->post();
+
+            $id = json_decode( '[' . $data['id'] . ']', true );
+            $id = $id[0];
+
+            $eatenPart = json_decode( '[' . $data['eatenPart'] . ']', true );
+            $eatenPart = $eatenPart[0];
+
+            $currentApple = Apple::findOne($id);
+
+            if ( $currentApple && $currentApple->state == Apple::FELL_TO_THE_GROUND ) {
+
+                $currentAppleSize = $currentApple->size - $eatenPart; 
+
+                switch ( $currentAppleSize ) {
+                    case 75: 
+                        $currentApple->size = 75;
+                        $sizeText = "Остался 75%";
+                        break;
+                    case 50: 
+                        $currentApple->size = 50;
+                        $sizeText = "Остался 50%";
+                        break;
+                    case 25: 
+                        $currentApple->size = 25;
+                        $sizeText = "Остался 25%";
+                        break;
+                    default:
+                        $currentApple->size = 0;
+                        $currentApple->state = Apple::EATEN;
+                        $currentApple->deleted_at = time();
+                        $sizeText = "Cъедено";
+                }
+                
+                $currentApple->save();
+
+            } else if ( $currentApple && ( $currentApple->state == Apple::ON_TREE || $currentApple->state == Apple::ROTTEN ) ) {
+
+                $sizeText = "Съесть нельзя, яблоко на дереве или гнилое яблоко!";
+
+            } else if ( $currentApple && $currentApple->state == Apple::EATEN ) {
+
+                $sizeText = "Яблоко съедено";
+
+            }
+
+            $respons = [ 'sizeText' => $sizeText,  'currentApple' => $currentApple ];
+           
+            return $respons;
+
+        }
+
+    }
 
 
     /**
