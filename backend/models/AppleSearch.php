@@ -41,6 +41,7 @@ class AppleSearch extends Apple
     public function search($params)
     {
         $query = Apple::find();
+         $query->orderBy('created_at DESC');
 
         // add conditions that should always apply here
 

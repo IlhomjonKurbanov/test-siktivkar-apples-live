@@ -27,14 +27,46 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'created_by',
+            // 'id',
+            'createdBy.username:text:Имя пользователя',
             'color',
             'size',
-            'state',
-            //'created_at',
-            //'fall_at',
-            //'deleted_at',
+
+            [
+                'attribute' => 'state',
+                'format' => 'raw',
+                'value' => function( $model ) {
+                    switch ( $model->state ) {
+                        case 1: 
+                            return "висит на дереве";
+                            break;
+                        case 2: 
+                            return "упало/лежит на земле";
+                            break;
+                        case 3: 
+                            return "гнилое яблоко";
+                            break;
+                    }
+                }
+            ],
+
+            [
+                'attribute' => 'created_at',
+                'format' => ['date', 'php:d.m.Y'],
+                'filter' => false,                    
+            ],   
+
+            [
+                'attribute' => 'fall_at',
+                'format' => ['date', 'php:d.m.Y'],
+                'filter' => false,                    
+            ],  
+
+            [
+                'attribute' => 'deleted_at',
+                'format' => ['date', 'php:d.m.Y'],
+                'filter' => false,                    
+            ],  
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
