@@ -30,7 +30,7 @@ AppAsset::register($this);
     <?php
     NavBar::begin([
         'brandLabel' => Yii::$app->name,
-        'brandUrl' => Yii::$app->homeUrl,
+        'brandUrl' => "http://apples-test-app.eh5.ru",
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],

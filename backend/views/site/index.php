@@ -57,7 +57,7 @@ $this->registerJs(
 
     function generateApplesList(){
         $.ajax({
-            url: "site/generate-apples",
+            url: "admin/site/generate-apples",
             type: "post",
             data: {
                 _csrf: yii.getCsrfToken(),
@@ -96,7 +96,7 @@ $this->registerJs(
     function fallenApple(appleId) {
         
         $.ajax({
-            url: "site/fallen-apple",
+            url: "admin/site/fallen-apple",
             type: "post",
             data: {
                 id: appleId,
@@ -134,7 +134,7 @@ $this->registerJs(
         var eatenPart = $("#inputSelect"+appleId).val();
 
         $.ajax({
-            url: "site/eaten-apple",
+            url: "admin/site/eaten-apple",
             type: "post",
             data: {
                 id: appleId,
@@ -179,7 +179,7 @@ $this->registerJs(
     '
 
         $.ajax({
-            url: "site/get-apples",
+            url: "admin/site/get-apples",
             type: "post",
             data: {
                 _csrf: yii.getCsrfToken(),

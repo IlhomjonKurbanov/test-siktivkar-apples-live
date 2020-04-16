@@ -142,10 +142,12 @@ class SiteController extends Controller
 
             $currentApple = Apple::findOne($id);
 
+            $appleStatus = "";
+
             switch ( $currentApple->state ) {
                 case 1: 
                     $currentApple->state = Apple::FELL_TO_THE_GROUND;
-                    $apple->fall_at = time();
+                    $currentApple->fall_at = time();
                     $currentApple->save(false);
                     $appleStatus = "Яблоко упало";
                     break;
