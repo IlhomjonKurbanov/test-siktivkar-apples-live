@@ -74,6 +74,8 @@ class SiteController extends Controller
     public function actionGetApples()
     {
         
+        SiteController::rottenApple();
+
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
         if ( Yii::$app->request->isAjax ) {
@@ -152,13 +154,20 @@ class SiteController extends Controller
                     $appleStatus = "Яблоко упало";
                     break;
                 case 2: 
-                    $appleStatus = "Яблоко уже лежит на земле";
+                    if ( $currentApple->size == 0 ) {
+                        $currentApple->state = Apple::EATEN;
+                        $currentApple->deleted_at = time();
+                        $currentApple->save(false);
+                        $appleStatus = "Уже съедено";
+                    } else {
+                        $appleStatus = "Яблоко уже лежит на земле";
+                    }
                     break;
                 case 3: 
-                    $appleStatus = "Гнилое яблоко";
+                    $appleStatus = "Уже съедено";
                     break;
                 default:
-                    $appleStatus = "";
+                    $appleStatus = "Гнилое яблоко";
 
             }
 
@@ -220,9 +229,13 @@ class SiteController extends Controller
                 
                 $currentApple->save();
 
-            } else if ( $currentApple && ( $currentApple->state == Apple::ON_TREE || $currentApple->state == Apple::ROTTEN ) ) {
+            } else if ( $currentApple && ( $currentApple->state == Apple::ON_TREE ) ) {
 
-                $sizeText = "Съесть нельзя, яблоко на дереве или гнилое яблоко!";
+                $sizeText = "Съесть нельзя, яблоко на дереве!";
+
+            } else if ( $currentApple && ( $currentApple->state == Apple::ROTTEN ) ) {
+
+                $sizeText = "Съесть нельзя, гнилое яблоко!";
 
             } else if ( $currentApple && $currentApple->state == Apple::EATEN ) {
 
@@ -272,6 +285,14 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+
+
+
+    public static function rottenApple() {
+
+        Apple::updateAll( [ 'state' => Apple::ROTTEN, 'size' => 0, 'color' => 'grey' ], [ '>', new \yii\db\Expression('NOW()'), new \yii\db\Expression('fall_at + 18000') ] );
+
     }
     
 }

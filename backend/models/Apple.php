@@ -95,7 +95,5 @@ class Apple extends \yii\db\ActiveRecord
         
         return $activeApples;
     }
-
-
-
+  
 }
